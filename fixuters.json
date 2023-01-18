@@ -1,0 +1,44 @@
+[
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name_product": "apple",
+      "title": "useful",
+      "image": "",
+      "category_id": 1,
+      "price": 3.0,
+      "date_create": "2021-12-31T14:25:00Z",
+      "date_update": "2021-12-31T14:25:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name_product": "bananas",
+      "title": "useful",
+      "image": "",
+      "category_id": 1,
+      "price": 5.0,
+      "date_create": "2021-12-31T14:25:00Z",
+      "date_update": "2021-12-31T14:25:00Z"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "category_name": "vegetables",
+      "title": "useful but not tasty"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "category_name": "milk",
+      "title": "white, fat"
+    }
+  }
+]
