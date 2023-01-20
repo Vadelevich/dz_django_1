@@ -1,0 +1,46 @@
+{% extends 'catalog/base.html' %}
+{% load mediapath from template_filters %}
+{% block content %}
+ <div class="container">
+  <div class="card">
+    {% for object in object_list %}
+    <div class="photo">
+<!--      <img src="{{ object.image|mediapath }}" alt="" border=5 height=200 width=300>-->
+        <img src="{% mediapath object.image %}" alt="" border=5 height=200 width=300>
+    <div class="description">
+      <h2>{{object.name_product}}</h2>
+        <h4>{{object.category.category_name}}</h4>
+      <h1>{{object.price}} $ </h1>
+      <p>{{object.title|truncatechars:100}}</p>
+      <button>Add to Cart</button>
+      <button>Wishlist</button>
+    </div>
+  </div>
+ </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--              -->
+<!--            <tr>-->
+<!--                <td><img src="/media/{{ object.image }}" alt="" border=3 height=100 width=150></img></th>-->
+<!--                <td> </td>-->
+<!--                <td> </td>-->
+<!--                <td> </td>-->
+<!--                <td> </td>-->
+<!--                <td>{{object.date_create }} </td>-->
+<!--                <td>{{object.date_update}} </td>-->
+<!--            </tr>-->
+{% endfor%}
+
+
+
+{% endblock %}

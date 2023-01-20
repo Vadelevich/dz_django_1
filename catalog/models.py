@@ -15,8 +15,8 @@ class Product(models.Model):
 
     name_product = models.CharField(max_length=250, verbose_name='Наименование', )
     title = models.TextField(verbose_name='Описание', )
-    image = models.ImageField(upload_to='products/', verbose_name='Изображение (превью)', **NULLUBLE, )
-    category_id = models.IntegerField(verbose_name='Категория', )
+    image = models.ImageField(upload_to='media/', verbose_name='Изображение (превью)', **NULLUBLE, )
+    category = models.ForeignKey('catalog.Category', verbose_name='Категория', on_delete=models.SET_NULL,null=True )
     price = models.FloatField(verbose_name='Цена за покупку', )
     date_create = models.DateTimeField(verbose_name='Дата создания', )
     date_update = models.DateTimeField(verbose_name='Дата последнего изменения', )
@@ -41,3 +41,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+
+
+
+
