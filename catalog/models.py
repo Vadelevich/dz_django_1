@@ -71,3 +71,7 @@ class Article(models.Model):
     publicate = models.CharField(choices=STATUSES, default=STATUSE_ACTIVE, max_length=10, )
     count = models.BigIntegerField(default=0, verbose_name='количество просмотров')
 
+    def save(self, *args, **kwargs):
+        """ при создании динамически формирует slug из заголовка """
+        self.slug = slugify(self.title)
+        super(Article, self).save(*args, **kwargs)
