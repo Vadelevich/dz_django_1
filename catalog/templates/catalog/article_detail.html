@@ -1,0 +1,18 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="photo">
+            <!--      <img src="{{ object.image|mediapath }}" alt="" border=5 height=200 width=300>-->
+            <img src="{% mediapath object.image %}" alt="" border=5 height=200 width=300>
+            <div class="description">
+                <h2>{{object.title}}</h2>
+                <h4>Количество просмотров {{object.count}}</h4>
+                <h1>{{object.date_create}} </h1>
+                <p>{{object.content|truncatechars:100}}</p>
+                <button>Add to Cart</button>
+                <button>Wishlist</button>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

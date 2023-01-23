@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
 
 
 class Product(models.Model):
@@ -16,7 +18,7 @@ class Product(models.Model):
     name_product = models.CharField(max_length=250, verbose_name='Наименование', )
     title = models.TextField(verbose_name='Описание', )
     image = models.ImageField(upload_to='media/', verbose_name='Изображение (превью)', **NULLUBLE, )
-    category = models.ForeignKey('catalog.Category', verbose_name='Категория', on_delete=models.SET_NULL,null=True )
+    category = models.ForeignKey('catalog.Category', verbose_name='Категория', on_delete=models.SET_NULL, null=True)
     price = models.FloatField(verbose_name='Цена за покупку', )
     date_create = models.DateTimeField(verbose_name='Дата создания', )
     date_update = models.DateTimeField(verbose_name='Дата последнего изменения', )
@@ -43,5 +45,29 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
 
 
+class Article(models.Model):
+    """  Поля :
+    - заголовок
+    - slug (реализовать через CharField)
+    - содержимое
+    - превью (изображение)
+    - дата создания
+    - признак публикации
+    - количество просмотров
 
+    """
+    STATUSE_ACTIVE = 'active'
+    STATUSE_INACTIVE = 'inactive'
+    STATUSES = (
+        ('active', 'Опубликованный'),
+        ('inactive', 'Не опубликованный'),
+    )
+
+    title = models.CharField(max_length=150, verbose_name='заголовок')
+    slug = models.CharField(max_length=250, verbose_name='slug', editable=False, default='', )
+    content = models.TextField(blank=True, verbose_name='Контент')
+    image = models.ImageField(upload_to='media/', verbose_name='изображение', blank=True)
+    date_create = models.DateTimeField(auto_now=True, verbose_name='дата создания')
+    publicate = models.CharField(choices=STATUSES, default=STATUSE_ACTIVE, max_length=10, )
+    count = models.BigIntegerField(default=0, verbose_name='количество просмотров')
 
