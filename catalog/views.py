@@ -1,6 +1,11 @@
+from django.conf import settings
+from django.core.mail import send_mail
+from django.db import transaction
+from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 
-from catalog.models import Product, Article
+from catalog.forms import ProductForm, VersionForm
+from catalog.models import Product, Article, Version
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
 from django.urls import reverse_lazy, reverse
 
@@ -9,9 +14,22 @@ def contacts(request):
     return render(request, 'catalog/contacts.html')
 
 
-class HomeListView(ListView):
+class ProductListView(ListView):
     model = Product
 
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('catalog:home')
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('catalog:home')
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('catalog:home')
 
 class ProductDetailView(DetailView):
     model = Product
@@ -69,4 +87,43 @@ def change_status(request, pk):
         block_item.publicate = Article.STATUSE_ACTIVE
     block_item.save()
 
+    send_mail(
+        subject='hgvjgvhg',
+        message='jhvjvv',
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=['vadelevich2013@yandex.ru']
+    )
     return redirect(reverse('catalog:blog'))
+
+class ProductUpdateWithVersionView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('catalog:home')
+    template_name = 'catalog/product_with_version.html'
+
+    def get_success_url(self):
+        return reverse('catalog:detail',args=[self.object.pk])
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        FormSet = inlineformset_factory(self.model,Version,form=VersionForm,extra=1)
+
+        if self.request.method == 'POST':
+            formset = FormSet(self.request.POST, instance=self.object)
+        else:
+            formset = FormSet(instance=self.object)
+
+        context_data ['formset'] = formset
+        return context_data
+    
+    def form_valid(self, form):
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+        print(self.request.method)
+        with transaction.atomic():
+            self.object = form.save()
+            if formset.is_valid():
+                formset.instance = self.object
+                formset.save()
+        return super().form_valid(form)
+

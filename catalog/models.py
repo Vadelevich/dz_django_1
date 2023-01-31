@@ -44,6 +44,9 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+    def __str__(self):
+        return self.category_name
+
 
 class Article(models.Model):
     """  Поля :
@@ -71,7 +74,28 @@ class Article(models.Model):
     publicate = models.CharField(choices=STATUSES, default=STATUSE_ACTIVE, max_length=10, )
     count = models.BigIntegerField(default=0, verbose_name='количество просмотров')
 
+
     def save(self, *args, **kwargs):
         """ при создании динамически формирует slug из заголовка """
         self.slug = slugify(self.title)
         super(Article, self).save(*args, **kwargs)
+
+
+class Version(models.Model):
+    """ Поля :
+    - продукт
+    - номер версии
+    - название версии
+    - признак текущей версии"""
+
+    STATUSE_ACTIVE = 'active'
+    STATUSE_INACTIVE = 'inactive'
+    STATUSES = (
+        ('active', 'активная'),
+        ('inactive', 'не активная'),
+    )
+    product = models.ForeignKey('Product',verbose_name='продукт', on_delete=models.CASCADE)
+    number = models.FloatField(verbose_name='номер версии',default=1)
+    name = models.CharField(max_length=100,verbose_name='название версии')
+    status = models.CharField(choices=STATUSES,default=STATUSE_INACTIVE,verbose_name='текущая версия',max_length=15)
+

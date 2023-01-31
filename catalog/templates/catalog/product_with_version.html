@@ -1,0 +1,77 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+<style>
+    .formset .formset-col{
+        display :inline-block;
+        width: 40%;
+        margin: 10px auto;
+        padding-right: 20px;
+    }
+    .formset .formset_row{
+        margin : 20px auto;
+    }
+    .formset{
+    margin :40px auto;
+    }
+
+</style>
+<div class="container">
+    <form method="post">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="submit">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="formset">
+                            <!--                            {% for form in formset.forms %}-->
+                            <!--                            {{ form.as_p }}-->
+                            <!--                            {% endfor %}-->
+                            {{ formset.management_form }}
+                            {% for form in formset.forms %}
+                            <div class="formset_row">
+                                {% for field in form.visible_fields %}
+                                <div class="formset-col">
+                                    {% if forloop.first %}
+                                    {% for hidden in form.hidden_fields %}
+                                    {{hidden}}
+                                    {% endfor %}
+                                    {% endif %}
+                                    {{ field.error.as_ul }}
+                                    {% if not forloop.last %}
+                                    {{field.label}}
+                                    {% endif %}
+                                    {{field}}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js"></script>
+    <script>
+        $('.formset_row').formset({
+            addText : '<span class ="btn btn-outline-primary">Добавить</span>',
+            deleteText : '<span class = "btn btn-outline-danger">Удалить</span>',
+            prefix:'tag_set',
+        });
+
+
+    </script>
+</div>
+{% endblock %}
