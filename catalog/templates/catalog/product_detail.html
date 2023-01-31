@@ -11,8 +11,15 @@
                 <h4>{{object.category.category_name}}</h4>
                 <h1>{{object.price}} $ </h1>
                 <p>{{object.title|truncatechars:100}}</p>
-                <button>Add to Cart</button>
-                <button>Wishlist</button>
+                <button> <a class="btn bth_outline_success" href="{% url 'catalog:update_product' object.pk %}">
+                    Изменить
+                </a></button>
+                 <button> <a class="btn bth_outline_success" href="{% url 'catalog:update_product_version' object.pk %}">
+                    Изменить c версией
+                </a></button>
+                 <button> <a class="btn bth_outline_success" href="{% url 'catalog:delete_product' object.pk %}">
+                     Удалить
+                </a></button>
             </div>
         </div>
     </div>

@@ -1,4 +1,7 @@
+
 from django.template.defaulttags import register
+
+from config import settings
 
 
 # Custom template filter to get data from a dictionary using key in template
@@ -10,4 +13,4 @@ def mediapath(text):
 
 @register.simple_tag
 def mediapath(text):
-    return f'/media/{text}'
+    return f'{settings.MEDIA_URL}{text}'
