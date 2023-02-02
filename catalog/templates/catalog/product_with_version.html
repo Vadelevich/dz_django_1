@@ -1,22 +1,32 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
 <style>
-    .formset .formset-col{
-        display :inline-block;
-        width: 40%;
-        margin: 10px auto;
-        padding-right: 20px;
-    }
-    .formset .formset_row{
-        margin : 20px auto;
-    }
-    .formset{
-    margin :40px auto;
-    }
+        .formset .formset-col {
+            display: inline-block;
+            width: 30%;
+            margin: 0 auto;
+            padding-right: 10px;
+        }
 
-</style>
-<div class="container">
-    <form method="post">
+        .formset .formset_row {
+            margin: 10px auto;
+        }
+
+        {#.formset .formset-col:nth-of-type(3n) {#}
+        {#    width: 5%;#}
+        {
+        #}#}
+
+        .formset {
+            margin: 20px auto;
+        }
+
+        .helptext {
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
+    <form method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col-6">
                 <div class="card">
@@ -59,19 +69,15 @@
             </div>
         </div>
     </form>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
-        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-            crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.min.js"
+            integrity="sha512-ltwjKsDTo3hW/wV66ZaEkf2wOAFxmg7rWM76J8kOcYKLSKy44WBYO/BFaNNH3NGDS8BSz3meB9wtSnm41oL+pA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $('.formset_row').formset({
-            addText : '<span class ="btn btn-outline-primary">Добавить</span>',
-            deleteText : '<span class = "btn btn-outline-danger">Удалить</span>',
-            prefix:'tag_set',
+            addText: '<span class="btn btn-outline-primary">Добавить предмет</span>',
+            deleteText: '<span class="btn btn-outline-danger">Удалить</span>',
+            prefix: 'tag_set',
         });
-
-
     </script>
-</div>
 {% endblock %}

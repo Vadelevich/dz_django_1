@@ -18,7 +18,7 @@
         {% for object in object_list %}
         <tr>
 
-            <td><img src="static/media/{{object.image}}" alt="" border=3 height=100 width=150></img>
+            <td><img src="media/{{object.image}}" alt="" border=3 height=100 width=150></img>
             </th>
             <td>{{object.name_product}}</td>
             <td>{{object.title|truncatechars:50}}</td>
@@ -26,7 +26,7 @@
             <td>{{object.price}}</td>
             <td>{{object.date_create }}</td>
             <td>{{object.date_update}}</td>
-            <td>{{object.Version.product_id}}</td>
+            <td>{{object.version.all}}</td>
             <td>
                 <a class="btn bth_outline_success" href="{% url 'catalog:detail' object.pk %}">
                     Посмотреть
