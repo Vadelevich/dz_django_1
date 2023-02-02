@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
@@ -15,6 +16,7 @@ class Product(models.Model):
 
     NULLUBLE = {'blank': True, 'null': True}
 
+    user_create = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,**NULLUBLE)
     name_product = models.CharField(max_length=250, verbose_name='Наименование', )
     title = models.TextField(verbose_name='Описание', )
     image = models.ImageField(upload_to='media/', verbose_name='Изображение (превью)', **NULLUBLE, )
@@ -80,7 +82,6 @@ class Article(models.Model):
         self.slug = slugify(self.title)
         super(Article, self).save(*args, **kwargs)
 
-
 class Version(models.Model):
     """ Поля :
     - продукт
@@ -94,7 +95,7 @@ class Version(models.Model):
         ('active', 'активная'),
         ('inactive', 'не активная'),
     )
-    product = models.ForeignKey('Product',verbose_name='продукт', on_delete=models.CASCADE)
+    product = models.ForeignKey('Product',verbose_name='продукт', on_delete=models.CASCADE,related_name='version')
     number = models.FloatField(verbose_name='номер версии',default=1)
     name = models.CharField(max_length=100,verbose_name='название версии')
     status = models.CharField(choices=STATUSES,default=STATUSE_INACTIVE,verbose_name='текущая версия',max_length=15)
