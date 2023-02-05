@@ -127,15 +127,14 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'fuckup@oscarbot.ru'
-EMAIL_HOST_PASSWORD = 'AsTSNVv7pun9'
+EMAIL_HOST_PASSWORD ='AsTSNVv7pun9'
 EMAIL_USE_SSL = True
 
-AUTH_USER_MODEL ='users.User'
-LOGIN_URL = '/user/'
+
+AUTH_USER_MODEL = 'users.User'
+LOGIN_URL = '/users/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL ='/'
