@@ -24,10 +24,17 @@ class Product(models.Model):
     price = models.FloatField(verbose_name='Цена за покупку', )
     date_create = models.DateTimeField(verbose_name='Дата создания', )
     date_update = models.DateTimeField(verbose_name='Дата последнего изменения', )
+    publish = models.BooleanField(default=False,verbose_name='статус')
 
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+        permissions = [
+            ('change_title_product','Can title product'),
+            ('set_category_product', 'Can category product'),
+            ('set_status_product', 'change status product'),
+        ]
+
     # def __str__(self):
     #     return f'{self.name_product} {self.price}'
 
@@ -73,8 +80,13 @@ class Article(models.Model):
     content = models.TextField(blank=True, verbose_name='Контент')
     image = models.ImageField(upload_to='media/', verbose_name='изображение', blank=True)
     date_create = models.DateTimeField(auto_now=True, verbose_name='дата создания')
-    publicate = models.CharField(choices=STATUSES, default=STATUSE_ACTIVE, max_length=10, )
+    published = models.CharField(choices=STATUSES, default=STATUSE_INACTIVE, max_length=10, )
     count = models.BigIntegerField(default=0, verbose_name='количество просмотров')
+
+    class Meta :
+        permissions = [
+            ('set_published_status','Can publish article'),
+        ]
 
 
     def save(self, *args, **kwargs):

@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.db import transaction
 from django.forms import inlineformset_factory
@@ -14,18 +16,32 @@ def contacts(request):
     return render(request, 'catalog/contacts.html')
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin,ListView):
     model = Product
 
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
+    
+    def form_valid(self, form):
+        if form.is_valid():
+            self.object = form.save(commit=False)   # Подготовиться обьект с данными из формы
+            self.object.user_create = self.request.user  # В поле user_create запишится пользователь который делает запрос
+            self.object.save()
+        return super().form_valid(form)
+            
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(UserPassesTestMixin,UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
+    def get_queryset(self):
+        return Product.objects.filter(user_create=self.request.user)
+
+    def test_func(self):
+        product = self.get_object()
+        return product.user_create == self.request.user or self.request.user.has_perms(perm_list=['change_title_product','set_category_product','set_status_product',])
 
 class ProductDeleteView(DeleteView):
     model = Product
@@ -74,17 +90,17 @@ class ArticleDetailView(DetailView):
         block_item.save()
         return super().get(self, request, pk)
 
-
+@login_required
 def change_status(request, pk):
     # block_item = Article.objects.get(pk=pk)
     # block_item = Article.objects.filter(pk=pk).first()
     # if block_item:
     #     ...
     block_item = get_object_or_404(Article, pk=pk)
-    if block_item.publicate == Article.STATUSE_ACTIVE:
-        block_item.publicate = Article.STATUSE_INACTIVE
+    if block_item.published == Article.STATUSE_ACTIVE:
+        block_item.published = Article.STATUSE_INACTIVE
     else:
-        block_item.publicate = Article.STATUSE_ACTIVE
+        block_item.published = Article.STATUSE_ACTIVE
     block_item.save()
 
     send_mail(
@@ -94,6 +110,7 @@ def change_status(request, pk):
         recipient_list=['vadelevich2013@yandex.ru']
     )
     return redirect(reverse('catalog:blog'))
+
 
 class ProductUpdateWithVersionView(UpdateView):
     model = Product
