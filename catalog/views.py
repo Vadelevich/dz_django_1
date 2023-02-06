@@ -7,10 +7,11 @@ from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 
 from catalog.forms import ProductForm, VersionForm
-from catalog.models import Product, Article, Version
+from catalog.models import Product, Article, Version, Category
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
 from django.urls import reverse_lazy, reverse
 
+from catalog.services import cache_category
 
 def contacts(request):
     return render(request, 'catalog/contacts.html')
@@ -18,6 +19,11 @@ def contacts(request):
 
 class ProductListView(LoginRequiredMixin,ListView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['category'] = cache_category()
+        return context_data
 
 class ProductCreateView(CreateView):
     model = Product
@@ -36,8 +42,8 @@ class ProductUpdateView(UserPassesTestMixin,UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
-    def get_queryset(self):
-        return Product.objects.filter(user_create=self.request.user)
+    # def get_queryset(self):
+    #     return Product.objects.filter(user_create=self.request.user)
 
     def test_func(self):
         product = self.get_object()
